@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import express from "express";
 import "./database";
+import { router } from "./routes";
 
 const app = express();
 
@@ -11,6 +12,9 @@ put     => Alterar uma informação
 delete  => Remover
 patch   => Alterar uma informação específica
 */
+app.use(express.json());
+
+app.use(router);
 
 app.get("/test", (request, response) => {
     //Request   => Entrando
