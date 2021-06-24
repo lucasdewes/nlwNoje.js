@@ -1,9 +1,8 @@
 import "reflect-metadata";
-import express from "express";
-import "./database";
+import express, { Request, Response, NextFunction } from "express";
+import "express-async-errors";
 import { router } from "./routes";
-
-const app = express();
+import "./database";
 
 /*  Os mais utilizados
 get     => Buscar informação
@@ -12,19 +11,27 @@ put     => Alterar uma informação
 delete  => Remover
 patch   => Alterar uma informação específica
 */
+
+const app = express();
+
 app.use(express.json());
 
 app.use(router);
 
-app.get("/test", (request, response) => {
-    //Request   => Entrando
-    //Response  => saindo
-    return response.send("Olá nlw");
-});
+app.use(
+    (err: Error, request: Request, response: Response, next: NextFunction) => {
+        if (err instanceof Error) {
+            return response.status(400).json({
+                error: err.message,
+            });
+        }
 
-app.post("/test-post", (request, response) => {
-    return response.send("test do post");
-});
+        return response.status(500).json({
+            status: "error",
+            message: "Internal Server Error",
+        });
+    }
+);
 
 //http://localhost:3000
 app.listen(3000, () => console.log("server is running"));
