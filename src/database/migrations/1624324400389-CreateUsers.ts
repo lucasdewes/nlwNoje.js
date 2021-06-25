@@ -8,12 +8,26 @@ export class CreateUsers1624324400389 implements MigrationInterface {
                 columns: [
                     {
                         name: "id",
-                        type: "uuid",
                         isPrimary: true,
+                        type: "varchar",
+                        generationStrategy: "uuid",
+                        default:
+                            process.env.CONNECTION_DRIVE === "mysql"
+                                ? `(UUID_TO_BIN(UUID(), TRUE))`
+                                : "uuid_generate_v4()",
                     },
                     {
                         name: "name",
                         type: "varchar",
+                    },
+                    {
+                        name: "email",
+                        type: "varchar",
+                    },
+                    {
+                        name: "password",
+                        type: "varchar",
+                        isNullable: true,
                     },
                     {
                         name: "admin",
@@ -22,6 +36,11 @@ export class CreateUsers1624324400389 implements MigrationInterface {
                     },
                     {
                         name: "created_at",
+                        type: "timestamp",
+                        default: "now()",
+                    },
+                    {
+                        name: "updated_at",
                         type: "timestamp",
                         default: "now()",
                     },

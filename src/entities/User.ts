@@ -1,41 +1,36 @@
 import {
-    Entity,
-    PrimaryColumn,
     Column,
     CreateDateColumn,
+    Entity,
+    PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
-import { isConstructorDeclaration } from "typescript";
-import { v4 as uuid } from "uuid";
+
+import { Exclude } from "class-transformer";
 
 @Entity("users")
 class User {
-    @PrimaryColumn()
-    readonly id: string;
-
-    @Column()
-    name: string;
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
 
     @Column()
     email: string;
 
     @Column()
-    admin: boolean;
+    name: string;
 
+    @Exclude()
     @Column()
     password: string;
+
+    @Column()
+    admin: boolean;
 
     @CreateDateColumn()
     created_at: Date;
 
     @UpdateDateColumn()
     updated_at: Date;
-
-    constructor() {
-        if (!this.id) {
-            this.id = uuid();
-        }
-    }
 }
 
 export { User };
